@@ -1,0 +1,31 @@
+language: node_js
+node_js: stable
+
+before_install:
+  - export TZ='Asia/Taipei'
+  - npm install -g hexo
+  - npm install -g hexo-cli
+
+install:
+  - npm install
+
+script:
+  - git submodule init #用于更新主题, 更新源为自己的主题项目，否则会 clone 最新 NexT 主题，而官方主题配置文件没有设置
+  - git submodule update
+  - /bin/cp -Rf ./.travis/copy/* ./
+  - hexo clean && hexo g
+
+after_script:
+  - git clone https://github.com/ydn2856/ydn2856.github.io ydn2856_public
+  - /bin/cp -Rf ./public/* ./ydn2856_public
+  - cd ydn2856_public
+  - git commit -m "Update docs"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - GH_REF: github.com/ydn2856/ydn2856.github.io.git
