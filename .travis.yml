@@ -5,19 +5,22 @@ before_install:
   - export TZ='Asia/Taipei'
   - npm install -g hexo
   - npm install -g hexo-cli
+  - npm install -g gulp
 
 install:
   - npm install
 
-script:
+before_script:
   - git submodule init #用于更新主题, 更新源为自己的主题项目，否则会 clone 最新 NexT 主题，而官方主题配置文件没有设置
   - git submodule update
-  - cp -Rf ./.travis/copy/* ./
+
+script:
+  - gulp before
   - hexo clean && hexo g
 
 after_script:
   - git clone https://github.com/ydn2856/ydn2856.github.io ydn2856_public
-  - cp -Rf ./public/* ./ydn2856_public
+  - gulp after
   - cd ydn2856_public
   - git config --global user.name "ydn2856" 
   - git config --global user.email "ydn2856@gmail.com"
