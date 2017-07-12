@@ -24,7 +24,7 @@ after_script:
   - cd ydn2856_public
   - git config --global user.name "ydn2856" 
   - git config --global user.email "ydn2856@gmail.com"
-  - gti add --all
+  - git add --all
   - git commit -m "Update docs"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
 
